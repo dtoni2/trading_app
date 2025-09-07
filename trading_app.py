@@ -6,12 +6,11 @@ import numpy as np
 from datetime import time
 
 # --- Stílusbeállítások a látványosabb diagramokhoz (sötét téma) ---
-# A Streamlit saját sötét témáját használjuk, de a Matplotlib-et is beállítjuk
 plt.style.use('dark_background')
 plt.rcParams['figure.facecolor'] = '#0E1117' # Streamlit sötét háttérszín
 plt.rcParams['axes.facecolor'] = '#0E1117'
 
-# --- Az adatelemző funkciók (nagyrészt változatlanok) ---
+# --- Az adatelemző funkciók (változatlanok) ---
 
 def load_and_prepare_data(uploaded_file):
     """Betölti a feltöltött fájlt és előkészíti az adatokat."""
@@ -95,7 +94,7 @@ else:
 
         with tab1:
             st.subheader("Egyenleg alakulása az idő függvényében")
-            fig, ax = plt.subplots(figsize=(8, 4))
+            fig, ax = plt.subplots(figsize=(7, 3)) # MÉRET MÓDOSÍTVA
             ax.plot(trading_data['close_time'], trading_data['balance'], color='#FF5733', label='Egyenleg (€)')
             ax.fill_between(trading_data['close_time'], trading_data['balance'], alpha=0.3, color='#FF5733')
             ax.set_title('Egyenleg alakulása')
@@ -113,11 +112,9 @@ else:
                 win_rate=('profitable', lambda x: x.mean() * 100)
             ).round(2).sort_values('total_profit', ascending=True)
             
-            # Táblázat megjelenítése
             st.dataframe(symbol_performance)
             
-            # Diagram megjelenítése
-            fig, ax = plt.subplots(figsize=(8, 4))
+            fig, ax = plt.subplots(figsize=(7, 3)) # MÉRET MÓDOSÍTVA
             colors = ['#2ECC71' if x > 0 else '#E74C3C' for x in symbol_performance['total_profit']]
             sns.barplot(x=symbol_performance['total_profit'], y=symbol_performance.index, palette=colors, ax=ax, orient='h')
             ax.set_title('Nettó Profit Instrumentumonként (€)')
@@ -131,12 +128,10 @@ else:
             performance = (performance * 100).round(2)
             performance.rename(columns={True: 'Nyerő (%)', False: 'Vesztő (%)'}, inplace=True)
             
-            # Táblázat megjelenítése
             st.dataframe(performance)
 
-            # Diagram megjelenítése
             fig, ax = plt.subplots()
-            performance.plot(kind='bar', stacked=True, color=['#E74C3C', '#2ECC71'], ax=ax, figsize=(7, 4))
+            performance.plot(kind='bar', stacked=True, color=['#E74C3C', '#2ECC71'], ax=ax, figsize=(5, 3)) # MÉRET MÓDOSÍTVA
             ax.set_title('Buy vs. Sell: Nyerő/Vesztő arány')
             ax.set_ylabel('Százalékos arány (%)')
             ax.set_xlabel('Pozíció iránya')
@@ -153,11 +148,9 @@ else:
                 win_rate=('profitable', lambda x: x.mean() * 100)
             ).reindex(days_order).dropna().round(2)
             
-            # Táblázat megjelenítése
             st.dataframe(day_performance)
 
-            # Diagram megjelenítése
-            fig, ax = plt.subplots(figsize=(8, 4))
+            fig, ax = plt.subplots(figsize=(7, 3)) # MÉRET MÓDOSÍTVA
             colors = ['#2ECC71' if x > 0 else '#E74C3C' for x in day_performance['total_profit']]
             sns.barplot(x=day_performance.index, y=day_performance['total_profit'], palette=colors, ax=ax)
             ax.set_title('Nettó Profit a Hét Napjai Szerint (€)')
