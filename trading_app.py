@@ -94,7 +94,7 @@ else:
 
         with tab1:
             st.subheader("Egyenleg alakulása az idő függvényében")
-            fig, ax = plt.subplots(figsize=(7, 3)) # MÉRET MÓDOSÍTVA
+            fig, ax = plt.subplots() # FIGSIZE ELTÁVOLÍTVA, HAGYJUK, HOGY AZ OSZLOP MÉRETEZZE
             ax.plot(trading_data['close_time'], trading_data['balance'], color='#FF5733', label='Egyenleg (€)')
             ax.fill_between(trading_data['close_time'], trading_data['balance'], alpha=0.3, color='#FF5733')
             ax.set_title('Egyenleg alakulása')
@@ -102,7 +102,11 @@ else:
             ax.set_ylabel('Egyenleg (€)')
             ax.grid(True, linestyle='--', alpha=0.3)
             ax.legend()
-            st.pyplot(fig)
+            
+            # --- ÚJ: Oszlopok a diagram méretezéséhez ---
+            col1, col2, col3 = st.columns([0.15, 0.7, 0.15]) # Keskeny, Széles, Keskeny
+            with col2: # A diagramot a középső (széles) oszlopba tesszük
+                st.pyplot(fig)
 
         with tab2:
             st.subheader("Teljesítmény instrumentumonként")
@@ -114,13 +118,17 @@ else:
             
             st.dataframe(symbol_performance)
             
-            fig, ax = plt.subplots(figsize=(7, 3)) # MÉRET MÓDOSÍTVA
+            fig, ax = plt.subplots() # FIGSIZE ELTÁVOLÍTVA
             colors = ['#2ECC71' if x > 0 else '#E74C3C' for x in symbol_performance['total_profit']]
             sns.barplot(x=symbol_performance['total_profit'], y=symbol_performance.index, palette=colors, ax=ax, orient='h')
             ax.set_title('Nettó Profit Instrumentumonként (€)')
             ax.set_xlabel('Nettó Profit (€)')
             ax.set_ylabel('Instrumentum')
-            st.pyplot(fig)
+
+            # --- ÚJ: Oszlopok a diagram méretezéséhez ---
+            col1, col2, col3 = st.columns([0.15, 0.7, 0.15])
+            with col2:
+                st.pyplot(fig)
 
         with tab3:
             st.subheader("Buy vs. Sell pozíciók összehasonlítása")
@@ -130,13 +138,17 @@ else:
             
             st.dataframe(performance)
 
-            fig, ax = plt.subplots()
-            performance.plot(kind='bar', stacked=True, color=['#E74C3C', '#2ECC71'], ax=ax, figsize=(5, 3)) # MÉRET MÓDOSÍTVA
+            fig, ax = plt.subplots() # FIGSIZE ELTÁVOLÍTVA
+            performance.plot(kind='bar', stacked=True, color=['#E74C3C', '#2ECC71'], ax=ax)
             ax.set_title('Buy vs. Sell: Nyerő/Vesztő arány')
             ax.set_ylabel('Százalékos arány (%)')
             ax.set_xlabel('Pozíció iránya')
             ax.tick_params(axis='x', rotation=0)
-            st.pyplot(fig)
+
+            # --- ÚJ: Oszlopok a diagram méretezéséhez ---
+            col1, col2, col3 = st.columns([0.25, 0.5, 0.25]) # Még keskenyebb középső oszlop
+            with col2:
+                st.pyplot(fig)
 
         with tab4:
             st.subheader("Teljesítmény a hét napjai szerint")
@@ -150,10 +162,14 @@ else:
             
             st.dataframe(day_performance)
 
-            fig, ax = plt.subplots(figsize=(7, 3)) # MÉRET MÓDOSÍTVA
+            fig, ax = plt.subplots() # FIGSIZE ELTÁVOLÍTVA
             colors = ['#2ECC71' if x > 0 else '#E74C3C' for x in day_performance['total_profit']]
             sns.barplot(x=day_performance.index, y=day_performance['total_profit'], palette=colors, ax=ax)
             ax.set_title('Nettó Profit a Hét Napjai Szerint (€)')
             ax.set_ylabel('Nettó Profit (€)')
             ax.set_xlabel('Nap')
-            st.pyplot(fig)
+
+            # --- ÚJ: Oszlopok a diagram méretezéséhez ---
+            col1, col2, col3 = st.columns([0.15, 0.7, 0.15])
+            with col2:
+                st.pyplot(fig)
